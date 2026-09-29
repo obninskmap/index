@@ -44,7 +44,8 @@ const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
 $('count').textContent=places.length;
 document.querySelector('.map-label .muted').textContent=`/ организаций: ${places.length}`;
 places.forEach((p,i)=>{
- const b=document.createElement('button');b.className='place';b.style.setProperty('--sector',p.group==='Наука'?'#66e4d0':p.group==='Медицина'?'#bca7ff':'#fac277');b.id='place-'+p.id;b.setAttribute('aria-pressed','false');b.setAttribute('aria-controls','detail');
+ const sector=p.group==='Ядерные технологии'||p.group==='Наука'?'#66e4d0':p.group==='Материаловедение'?'#fac277':'#7af1c4';
+ const b=document.createElement('button');b.className='place';b.style.setProperty('--sector',sector);b.id='place-'+p.id;b.setAttribute('aria-pressed','false');b.setAttribute('aria-controls','detail');
  b.innerHTML=`<span class="place-num">${String(i+1).padStart(2,'0')}</span><span><strong>${escapeHTML(p.name)}</strong><small>${escapeHTML(p.category)}</small></span><span class="place-arrow" aria-hidden="true">↗</span>`;
  b.addEventListener('click',()=>openPlace(p,true,b));
  b.addEventListener('mouseenter',()=>{const m=markers.get(p.id);if(m)m.getElement()?.classList.add('hovered');});
@@ -123,8 +124,9 @@ if(window.L){
  L.control.zoom({position:'bottomright',zoomInTitle:'Приблизить',zoomOutTitle:'Отдалить'}).addTo(map);
  L.control.scale({position:'bottomleft',imperial:false}).addTo(map);
  const streets=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>'});
- const satellite=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imagery &copy; <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank" rel="noopener noreferrer">Esri, Maxar, Earthstar Geographics and the GIS User Community</a>'});
- tiles=satellite;tiles.addTo(map);
+ const satellite=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,attribution:'Спутник &copy; <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank" rel="noopener noreferrer">Esri, Maxar, Earthstar Geographics</a>'});
+ tiles=satellite;
+ satellite.addTo(map);
  L.control.layers({'Спутник':satellite,'Улицы':streets},null,{position:'bottomleft',collapsed:false}).addTo(map);
  let failed=0,loaded=0;
  map.on('baselayerchange',e=>{tiles=e.layer;failed=0;loaded=0;$('map-error').hidden=true;});
@@ -133,14 +135,11 @@ if(window.L){
   layer.on('tileerror',()=>{
    if(layer!==tiles)return;
    failed++;
-   if(failed>2&&!loaded){
-    if(layer===satellite){map.removeLayer(satellite);tiles=streets;failed=0;loaded=0;streets.addTo(map);}
-    else $('map-error').hidden=false;
-   }
+   if(failed>15&&!loaded)$('map-error').hidden=false;
   });
   layer.on('tileload',()=>{if(layer===tiles){loaded++;$('map-error').hidden=true;}});
  }
- $('retry').addEventListener('click',()=>{failed=0;$('map-error').hidden=true;tiles.redraw();});
+ $('retry').addEventListener('click',()=>{failed=0;$('map-error').hidden=true;if(tiles)tiles.redraw();});
  // Set the view before adding markers: Leaflet creates marker elements only after map load.
  overview();
  places.forEach((p,i)=>{
