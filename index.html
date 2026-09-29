@@ -3,21 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f8f4">
+  <meta name="theme-color" content="#123e39">
   <meta name="description" content="Предприятия и научные центры Обнинска на интерактивной карте: фотографии, история, направления работы и адреса.">
   <title>Обнинск · Карта научных организаций</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23123e39'/%3E%3Cpath d='M16 5a8 8 0 0 0-8 8c0 6 8 14 8 14s8-8 8-14a8 8 0 0 0-8-8' fill='%237af1c4'/%3E%3Ccircle cx='16' cy='13' r='3' fill='%23123e39'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="vendor/leaflet.css">
-  <link rel="stylesheet" href="style.css?v=20260914-window">
-  <link rel="stylesheet" href="material.css?v=20260929">
+  <link rel="stylesheet" href="style.css?v=20260929-restored">
   <script src="vendor/leaflet.js" defer></script>
-  <script src="data.js?v=20260914-window" defer></script>
-  <script src="photos.js?v=20260914-window" defer></script>
-  <script src="app.js?v=20260914-window" defer></script>
+  <script src="data.js?v=20260929-restored" defer></script>
+  <script src="photos.js?v=20260929-restored" defer></script>
+  <script src="app.js?v=20260929-restored" defer></script>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="./" aria-label="Обнинск — начало"><span class="brandmark">О<span>•</span></span><span>Обнинск</span></a>
+    <a class="brand" href="./" aria-label="Обнинск — начало"><span class="brandmark">О<span>•</span></span><span>Обнинск<span class="brand-sub">НАУЧНЫЙ ОБНИНСК</span></span></a>
     <div class="topbar-actions">
       <button id="overview" class="outline">Вся карта <span aria-hidden="true">↗</span></button>
       <div class="city-crest" title="Герб города Обнинска" aria-label="Герб города Обнинска">
@@ -27,7 +26,7 @@
   </header>
   <main class="workspace">
     <aside class="sidebar" aria-label="Предприятия Обнинска">
-      <div class="intro"><h1>Наука. <br>Производство. <br><span>Обнинск.</span></h1><p>Наведите на метку, чтобы узнать о предприятии. На телефоне — коснитесь её.</p></div>
+      <div class="intro"><div class="eyebrow">ОБНИНСК / КАЛУЖСКАЯ ОБЛАСТЬ</div><h1>Наука. <br>Производство. <br><span>Обнинск.</span></h1><p>Наведите на метку, чтобы узнать о предприятии. На телефоне — коснитесь её.</p></div>
       <div class="discovery"><label for="search">НАЙТИ ПРЕДПРИЯТИЕ</label><input id="search" type="search" placeholder="Название, продукция, адрес…" autocomplete="off"><div class="filters" aria-label="Отрасль"><button data-group="Все" aria-pressed="true">Все</button><button data-group="Ядерные технологии" aria-pressed="false">Ядерные технологии</button><button data-group="Материаловедение" aria-pressed="false">Материаловедение</button><button data-group="Экология и климат" aria-pressed="false">Экология и климат</button></div></div><div class="list-caption"><h2>Предприятия и научные центры</h2><span id="count"></span></div>
       <nav id="places" aria-label="Выбрать предприятие"></nav><div id="empty-results" class="empty-results" hidden>Ничего не найдено.<button id="clear-search">Сбросить поиск</button></div>
       <div class="sidebar-foot">Избранные организации · не полный реестр<br>Метки обозначают территории, а не проходные.</div>
