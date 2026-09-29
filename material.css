@@ -48,6 +48,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .header-note a:hover { background: var(--md-surface-container-high); color: var(--md-on-surface); }
 .outline { background: var(--md-primary); color: var(--md-on-primary); border: 0; border-radius: 100px; box-shadow: var(--md-elevation-2); min-height: 44px; }
 .outline:hover { background: #005443; box-shadow: var(--md-elevation-3); }
+.topbar-actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.city-crest { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.crest-img { height: 52px; width: auto; display: block; filter: drop-shadow(0 2px 5px rgba(0, 33, 23, 0.18)); transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1); }
+.crest-img:hover { transform: scale(1.06); }
 .workspace { height: calc(100dvh - 80px); background: var(--md-surface); }
 .sidebar {
   background: var(--md-surface-container);
@@ -165,6 +169,8 @@ dialog.detail-modal { border-radius: 28px; background: var(--md-surface); }
 @media (max-width:1150px) { .header-note { display: none; } }
 @media (max-width:700px) {
   .topbar { height: 72px; padding: 0 16px; }
+  .topbar-actions { gap: 10px; }
+  .crest-img { height: 42px; }
   .workspace { min-height: calc(100dvh - 72px); }
   .map-wrap { margin: 8px; border-radius: 24px; height: 52dvh; }
   .sidebar { border-right: 0; }
