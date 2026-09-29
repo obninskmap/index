@@ -38,7 +38,7 @@ const galleries = {
       "source": "https://www.ippe.ru/facilities",
       "credit": "ФЭИ, официальный сайт",
       "license": null,
-      "originalUrl": "https://www.ippe.ru/images/obyaeu/experimental-facilities/svd-2.jpg"
+      "originalUrl": "https://www.ippe.ru/images/obyaeu/experimental-facilities/svd.jpg"
     },
     {
       "url": "images/ippe-07.jpg",
