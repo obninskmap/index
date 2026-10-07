@@ -1,11 +1,14 @@
 ﻿'use strict';
-const { runUnitSuite } = require('./tests/suite-unit');
-const { runIntegrationSuite } = require('./tests/suite-integration');
-const { runInteractiveSuite } = require('./tests/suite-interactive');
+const { runUnitSuite } = require('./suite-unit');
+const { runIntegrationSuite } = require('./suite-integration');
+const { runInteractiveSuite } = require('./suite-interactive');
+const { runAtlasSuite } = require('./suite-atlas');
 
 console.log('===============================================================');
 console.log(' STARTING AUTOMATED TEST VERIFICATION: OBNINSK MAP');
-console.log('===============================================================\n');
+console.log(
+  '===============================================================\n',
+);
 
 let totalTests = 0;
 let passedTests = 0;
@@ -43,18 +46,23 @@ const reporter = {
       }
     })();
     asyncTasks.push(p);
-  }
+  },
 };
 
 (async () => {
   runUnitSuite(reporter);
   runIntegrationSuite(reporter);
   runInteractiveSuite(reporter);
+  runAtlasSuite(reporter);
 
   await Promise.all(asyncTasks);
 
-  console.log('\n===============================================================');
-  console.log(` VERIFICATION COMPLETE: ${passedTests} / ${totalTests} tests passed`);
+  console.log(
+    '\n===============================================================',
+  );
+  console.log(
+    ` VERIFICATION COMPLETE: ${passedTests} / ${totalTests} tests passed`,
+  );
   if (failedTests > 0) {
     console.error(` STATUS: FAILED (${failedTests} failures)`);
     for (const f of failures) {
@@ -63,8 +71,12 @@ const reporter = {
     }
     process.exit(1);
   } else {
-    console.log(' STATUS: ALL TESTS PASSED (100% verified with live execution)');
-    console.log('===============================================================\n');
+    console.log(
+      ' STATUS: ALL TESTS PASSED (100% verified with live execution)',
+    );
+    console.log(
+      '===============================================================\n',
+    );
     process.exit(0);
   }
 })();

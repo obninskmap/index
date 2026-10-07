@@ -43,7 +43,9 @@ class MockElement {
     this.attributes = new Map();
     this.dataset = {};
     this.style = {
-      setProperty: (k, v) => { this.style[k] = v; }
+      setProperty: (k, v) => {
+        this.style[k] = v;
+      },
     };
     this.children = [];
     this.parentNode = null;
@@ -62,7 +64,9 @@ class MockElement {
     this._textContent = '';
   }
 
-  get className() { return this._className; }
+  get className() {
+    return this._className;
+  }
   set className(val) {
     this._className = val || '';
     this.classList.classes.clear();
@@ -79,17 +83,25 @@ class MockElement {
     }
     if (name === 'class') this.className = String(val);
     if (name.startsWith('data-')) {
-      const camel = name.slice(5).replace(/-([a-z])/g, (_, g) => g.toUpperCase());
+      const camel = name
+        .slice(5)
+        .replace(/-([a-z])/g, (_, g) => g.toUpperCase());
       this.dataset[camel] = String(val);
     }
   }
 
-  getAttribute(name) { return this.attributes.get(name) || null; }
-  hasAttribute(name) { return this.attributes.has(name); }
+  getAttribute(name) {
+    return this.attributes.get(name) || null;
+  }
+  hasAttribute(name) {
+    return this.attributes.has(name);
+  }
   removeAttribute(name) {
     this.attributes.delete(name);
     if (name.startsWith('data-')) {
-      const camel = name.slice(5).replace(/-([a-z])/g, (_, g) => g.toUpperCase());
+      const camel = name
+        .slice(5)
+        .replace(/-([a-z])/g, (_, g) => g.toUpperCase());
       delete this.dataset[camel];
     }
   }
@@ -101,7 +113,10 @@ class MockElement {
 
   removeEventListener(type, handler) {
     if (!this.listeners.has(type)) return;
-    this.listeners.set(type, this.listeners.get(type).filter(x => x !== handler));
+    this.listeners.set(
+      type,
+      this.listeners.get(type).filter((x) => x !== handler),
+    );
   }
 
   dispatchEvent(evt) {
@@ -146,26 +161,45 @@ class MockElement {
     }
   }
 
-  focus() { if (this.doc) this.doc.activeElement = this; }
-  getBoundingClientRect() { return { top: 0, left: 0, right: 100, bottom: 100, width: 100, height: 100 }; }
-  showModal() { this.open = true; }
-  close() { this.open = false; }
+  focus() {
+    if (this.doc) this.doc.activeElement = this;
+  }
+  getBoundingClientRect() {
+    return {
+      top: 0,
+      left: 0,
+      right: 100,
+      bottom: 100,
+      width: 100,
+      height: 100,
+    };
+  }
+  showModal() {
+    this.open = true;
+  }
+  close() {
+    this.open = false;
+  }
   requestFullscreen() {
     if (this.doc) this.doc.fullscreenElement = this;
     return Promise.resolve();
   }
-  insertAdjacentHTML(position, html) { this.innerHTML += html; }
+  insertAdjacentHTML(position, html) {
+    this.innerHTML += html;
+  }
 
   get textContent() {
     if (this.children.length === 0) return this._textContent;
-    return this.children.map(c => c.textContent).join('');
+    return this.children.map((c) => c.textContent).join('');
   }
   set textContent(val) {
     this._textContent = String(val);
     this.children = [];
   }
 
-  get innerHTML() { return this._innerHTML; }
+  get innerHTML() {
+    return this._innerHTML;
+  }
   set innerHTML(html) {
     const unregister = (node) => {
       if (node.id && this.doc) this.doc.elementsById.delete(node.id);
@@ -182,11 +216,17 @@ class MockElement {
       if (tag.startsWith('/')) continue;
       const attrStr = match[2];
       const el = new MockElement(tag, this.doc);
-      const attrRegex = /([a-zA-Z0-9\-]+)(?:=(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
+      const attrRegex =
+        /([a-zA-Z0-9\-]+)(?:=(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
       let aMatch;
       while ((aMatch = attrRegex.exec(attrStr)) !== null) {
         const attrName = aMatch[1];
-        const attrVal = aMatch[2] !== undefined ? aMatch[2] : (aMatch[3] !== undefined ? aMatch[3] : (aMatch[4] || ''));
+        const attrVal =
+          aMatch[2] !== undefined
+            ? aMatch[2]
+            : aMatch[3] !== undefined
+              ? aMatch[3]
+              : aMatch[4] || '';
         el.setAttribute(attrName, attrVal);
       }
       el.parentNode = this;
@@ -218,7 +258,9 @@ class MockElement {
           const cleanV = v.replace(/^["']|["']$/g, '');
           matches = node.getAttribute(k) === cleanV;
         } else {
-          matches = node.hasAttribute(inner) || (node.dataset && (inner.replace(/^data-/, '') in node.dataset));
+          matches =
+            node.hasAttribute(inner) ||
+            (node.dataset && inner.replace(/^data-/, '') in node.dataset);
         }
       } else {
         matches = node.tagName.toLowerCase() === sel.toLowerCase();
@@ -239,15 +281,22 @@ class MockDocument {
     this.fullscreenElement = null;
     this.listeners = new Map();
   }
-  getElementById(id) { return this.elementsById.get(id) || null; }
-  createElement(tag) { return new MockElement(tag, this); }
+  getElementById(id) {
+    return this.elementsById.get(id) || null;
+  }
+  createElement(tag) {
+    return new MockElement(tag, this);
+  }
   addEventListener(type, handler) {
     if (!this.listeners.has(type)) this.listeners.set(type, []);
     this.listeners.get(type).push(handler);
   }
   removeEventListener(type, handler) {
     if (!this.listeners.has(type)) return;
-    this.listeners.set(type, this.listeners.get(type).filter(x => x !== handler));
+    this.listeners.set(
+      type,
+      this.listeners.get(type).filter((x) => x !== handler),
+    );
   }
   dispatchEvent(evt) {
     const list = this.listeners.get(evt.type) || [];
@@ -275,7 +324,10 @@ class MockDocument {
           if (node.classList.contains(c2)) {
             let p = node.parentElement;
             while (p) {
-              if (p.classList.contains(c1)) { matches = true; break; }
+              if (p.classList.contains(c1)) {
+                matches = true;
+                break;
+              }
               p = p.parentElement;
             }
           }
@@ -301,7 +353,18 @@ function createMockEnvironment(options = {}) {
   const doc = new MockDocument();
   const main = doc.createElement('main');
   main.className = 'workspace';
+  main.id = 'workspace';
   doc.body.append(main);
+  for (const id of [
+    'view-list',
+    'view-map',
+    'reset-filters',
+    'detail-backdrop',
+  ]) {
+    const button = doc.createElement('button');
+    button.id = id;
+    main.append(button);
+  }
 
   const detailWindow = doc.createElement('dialog');
   detailWindow.id = 'detail-window';
@@ -419,7 +482,12 @@ function createMockEnvironment(options = {}) {
   clearSearchBtn.id = 'clear-search';
   doc.body.append(clearSearchBtn);
 
-  for (const g of ['Все', 'Ядерные технологии', 'Материаловедение', 'Экология и климат']) {
+  for (const g of [
+    'Все',
+    'Ядерные технологии',
+    'Материаловедение',
+    'Экология и климат',
+  ]) {
     const btn = doc.createElement('button');
     btn.setAttribute('data-group', g);
     btn.setAttribute('aria-pressed', g === 'Все' ? 'true' : 'false');
@@ -428,7 +496,9 @@ function createMockEnvironment(options = {}) {
 
   const clipboard = {
     content: null,
-    writeText: async (t) => { clipboard.content = t; }
+    writeText: async (t) => {
+      clipboard.content = t;
+    },
   };
 
   const mapInstances = [];
@@ -451,14 +521,32 @@ function createMockEnvironment(options = {}) {
       const list = this.eventListeners.get(type) || [];
       for (const fn of list) fn(data);
     }
-    locate(opts) { this.locateOpts = opts; }
-    fitBounds(bounds, opts) { this.fittedBounds = bounds; this.fitOpts = opts; }
-    project(coords, zoom) { return { x: coords[0] * 10, y: coords[1] * 10 }; }
-    unproject(pt, zoom) { return [pt.x / 10, pt.y / 10]; }
-    setView(center, zoom, opts) { this.currentCenter = center; this.currentZoom = zoom; }
-    hasLayer(layer) { return this.layers.has(layer); }
-    removeLayer(layer) { this.layers.delete(layer); }
-    invalidateSize() { this.invalidated = true; }
+    locate(opts) {
+      this.locateOpts = opts;
+    }
+    fitBounds(bounds, opts) {
+      this.fittedBounds = bounds;
+      this.fitOpts = opts;
+    }
+    project(coords, zoom) {
+      return { x: coords[0] * 10, y: coords[1] * 10 };
+    }
+    unproject(pt, zoom) {
+      return [pt.x / 10, pt.y / 10];
+    }
+    setView(center, zoom, opts) {
+      this.currentCenter = center;
+      this.currentZoom = zoom;
+    }
+    hasLayer(layer) {
+      return this.layers.has(layer);
+    }
+    removeLayer(layer) {
+      this.layers.delete(layer);
+    }
+    invalidateSize() {
+      this.invalidated = true;
+    }
   }
 
   class MockMarker {
@@ -476,13 +564,19 @@ function createMockEnvironment(options = {}) {
       for (const fn of addListeners) fn();
       return this;
     }
-    bindTooltip() { return this; }
+    bindTooltip() {
+      return this;
+    }
     on(type, handler) {
       if (!this.listeners.has(type)) this.listeners.set(type, []);
       this.listeners.get(type).push(handler);
     }
-    setLatLng(coords) { this.coords = coords; }
-    getElement() { return this.element; }
+    setLatLng(coords) {
+      this.coords = coords;
+    }
+    getElement() {
+      return this.element;
+    }
   }
 
   const mockL = {
@@ -491,21 +585,26 @@ function createMockEnvironment(options = {}) {
     divIcon: (opts) => opts,
     tileLayer: (url, opts) => {
       const tl = {
-        url, opts, listeners: new Map(),
-        addTo: (m) => { m.layers.add(tl); return tl; },
+        url,
+        opts,
+        listeners: new Map(),
+        addTo: (m) => {
+          m.layers.add(tl);
+          return tl;
+        },
         on: (evt, fn) => {
           if (!tl.listeners.has(evt)) tl.listeners.set(evt, []);
           tl.listeners.get(evt).push(fn);
         },
-        redraw: () => {}
+        redraw: () => {},
       };
       return tl;
     },
     control: {
       zoom: () => ({ addTo: () => {} }),
       scale: () => ({ addTo: () => {} }),
-      layers: () => ({ addTo: () => {} })
-    }
+      layers: () => ({ addTo: () => {} }),
+    },
   };
 
   const safeSetTimeout = (fn, delay) => {
@@ -516,27 +615,40 @@ function createMockEnvironment(options = {}) {
 
   const sandbox = {
     window: {
+      addEventListener: (type, handler) => doc.addEventListener(type, handler),
       location: {
         origin: 'https://test-obninsk.local',
         pathname: '/',
-        hash: options.hash || ''
+        hash: options.hash || '',
       },
       navigator: { clipboard },
-      matchMedia: (q) => ({ matches: false }),
-      ResizeObserver: class { observe() {} unobserve() {} disconnect() {} },
+      matchMedia: (q) => ({
+        matches: Boolean(options.mobile && q === '(max-width:700px)'),
+      }),
+      ResizeObserver: class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
       setTimeout: safeSetTimeout,
       clearTimeout: (id) => clearTimeout(id),
       PLACES: null,
-      L: options.noLeaflet ? undefined : mockL
+      L: options.noLeaflet ? undefined : mockL,
     },
     document: doc,
     navigator: { clipboard },
-    matchMedia: (q) => ({ matches: false }),
-    ResizeObserver: class { observe() {} unobserve() {} disconnect() {} },
+    matchMedia: (q) => ({
+      matches: Boolean(options.mobile && q === '(max-width:700px)'),
+    }),
+    ResizeObserver: class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    },
     setTimeout: safeSetTimeout,
     clearTimeout: (id) => clearTimeout(id),
     console: { log: () => {}, error: () => {}, warn: () => {} },
-    L: options.noLeaflet ? undefined : mockL
+    L: options.noLeaflet ? undefined : mockL,
   };
 
   sandbox.window.document = doc;
@@ -544,9 +656,15 @@ function createMockEnvironment(options = {}) {
   vm.createContext(sandbox);
 
   const baseDir = path.resolve(__dirname, '..');
-  const dataJs = fs.readFileSync(path.join(baseDir, 'data.js'), 'utf8');
+  const dataJs = fs.readFileSync(
+    path.join(baseDir, 'assets', 'js', 'data.js'),
+    'utf8',
+  );
   vm.runInContext(dataJs, sandbox);
-  const photosJs = fs.readFileSync(path.join(baseDir, 'photos.js'), 'utf8');
+  const photosJs = fs.readFileSync(
+    path.join(baseDir, 'assets', 'js', 'photos.js'),
+    'utf8',
+  );
   vm.runInContext(photosJs, sandbox);
 
   return {
@@ -555,7 +673,7 @@ function createMockEnvironment(options = {}) {
     clipboard,
     mapInstances,
     markersCreated,
-    eval: (expr) => vm.runInContext(expr, sandbox)
+    eval: (expr) => vm.runInContext(expr, sandbox),
   };
 }
 

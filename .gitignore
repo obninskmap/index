@@ -1,5 +1,6 @@
 .build/
 .playwright-cli/
+output/playwright/
 .vscode/
 .agents/
 node_modules/
