@@ -156,7 +156,8 @@ dd {
   display: block;
   width: 100%;
   height: 180px;
-  object-fit: cover;
+  object-fit: contain;
+  background: #e8efe9;
 }
 
 .photos figcaption {

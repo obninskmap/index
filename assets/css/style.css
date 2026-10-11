@@ -26,7 +26,7 @@
   width: 100%;
   height: auto;
   max-height: 280px;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
@@ -187,13 +187,13 @@
 .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
-  transition: transform 0.2s;
+  transition: filter 0.2s;
 }
 
 .gallery-item:hover img {
-  transform: scale(1.05);
+  filter: brightness(1.06);
 }
 
 .gallery-item > span {
@@ -344,6 +344,19 @@ dialog img {
   margin: auto;
 }
 
+#lightbox {
+  box-sizing: border-box;
+  width: min(940px, 94vw);
+  overflow-x: hidden;
+}
+
+#lightbox #large-photo {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(70dvh, calc(94dvh - 190px));
+}
+
 dialog p {
   font-size: 13px;
   line-height: 1.7;
@@ -433,7 +446,7 @@ dialog.detail-modal::backdrop {
   height: auto;
   aspect-ratio: 16 / 9;
   max-height: 420px;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .detail-modal .detail-text {
@@ -477,7 +490,7 @@ dialog.detail-modal::backdrop {
 .detail-modal .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 @media (max-width: 700px) {
@@ -518,7 +531,7 @@ dialog.detail-modal::backdrop {
   .detail-modal .gallery-item img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 
@@ -1090,6 +1103,7 @@ dialog.detail-modal::backdrop {
 #lightbox .icon-button {
   width: 44px;
   height: 44px;
+  color: #173d3b;
 }
 
 .photo-nav button {
